@@ -10,6 +10,7 @@ def print_board(board):
 
 def ask_position(board, players, rounds, pos):
     player  = players[rounds%2]
+
     try:
         pos = int(input('Player {}s Please choose a number 1-9: '.format(player)))
     except ValueError:
@@ -23,7 +24,7 @@ def ask_position(board, players, rounds, pos):
 
 
 def mark_on(pos, players, board, rounds):
-    marker = players[rounds%2]
+    marker = players[rounds%2] # 'o'
     board[pos-1] = marker
     data['rounds'] = rounds + 1
 
@@ -37,7 +38,7 @@ def is_straight(board):
     ]
 
     is_win_v = [
-        len(set(b[0::3])),
+        len(set(b[0::3])), # start:end:offset
         len(set(b[1::3])),
         len(set(b[2::3])),
     ]
@@ -56,11 +57,15 @@ def is_straight(board):
     labels = ['h0', 'h1', 'h2', 'v0', 'v1', 'v2', 'd0', 'd1']
     wins_vector = is_win_h+is_win_v+is_win_diag 
 
+    print('wins_v:', wins_vector)
+
     which_one = [i for i, v in enumerate(wins_vector) if v == 1]
 
+    print('which_one:', which_one)
+
     if len(which_one) > 0:
-        label = labels[which_one[0]]
-        player_index = linear_index[label[0]][int(label[1])]
+        label = labels[which_one[0]] # h1
+        player_index = linear_index[label[0]][int(label[1])] # h, 1
         player = board[player_index]
         print("Winner is {} player".format(player))
         return True
@@ -75,7 +80,7 @@ def game_loops(data):
             break
 
         print('round:', data['rounds'])
-        data['pos'] = ask_position(**data)
+        data['pos'] = ask_position(**data) # players=['X', 'O'], rounds=1
         mark_on(**data)
         print_board(data['board'])
         print("")
